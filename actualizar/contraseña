@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPasen</title> <!-- Título de la página -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff; /* Fondo blanco */
+            text-align: center; /* Centrar texto en la página */
+            padding-top: 50px; /* Ajuste del padding superior */
+            margin: 0;
+            position: relative;
+            min-height: 100vh; /* Altura mínima */
+            display: flex; /* Flexbox para centrar todo el contenido */
+            flex-direction: column; /* Alinear verticalmente */
+            justify-content: center; /* Centrando verticalmente el contenido */
+        }
+        .header-logo {
+            position: absolute;
+            left: 20px; /* Alinear el logo de iPasen a la izquierda */
+            top: 10px; /* Mover el logo de iPasen más hacia arriba */
+            max-width: 100px; /* Ajuste de tamaño del logo */
+            height: auto;
+        }
+        .language-select {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            display: flex; /* Flex para alinear los botones */
+            gap: 10px; /* Espacio entre los botones */
+        }
+        .language-button {
+            background-color: rgba(60, 118, 61, 0.8); /* Color de fondo verde con transparencia */
+            color: white; /* Color del texto */
+            padding: 5px 10px; /* Espaciado */
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Bordes redondeados */
+            cursor: pointer; /* Cursor de mano */
+            transition: background-color 0.3s; /* Transición suave */
+            font-size: 14px; /* Tamaño de fuente */
+        }
+        .language-button:hover {
+            background-color: rgba(60, 118, 61, 1); /* Color al pasar el cursor */
+        }
+        .container {
+            max-width: 400px; /* Ancho máximo */
+            margin: 50px auto; /* Márgenes superior e inferior */
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con opacidad */
+            border-radius: 8px; /* Bordes redondeados */
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            display: flex; /* Flexbox para centrar contenido */
+            flex-direction: column; /* Alinear verticalmente */
+            align-items: center; /* Centrar elementos */
+        }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 20px); /* Ancho completo menos el espacio de los bordes */
+            padding: 10px;
+            margin: 10px 0; /* Margen superior e inferior */
+            border: 1px solid #ccc; /* Borde gris */
+            border-radius: 5px; /* Bordes redondeados */
+        }
+        input[type="submit"] {
+            background-color: #3c763d; /* Color verde para el botón */
+            color: #fff; /* Color del texto */
+            padding: 10px 20px; /* Espaciado del botón */
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Bordes redondeados */
+            cursor: pointer; /* Cursor de mano */
+            margin-top: 10px; /* Espaciado superior del botón */
+        }
+        input[type="submit"]:hover {
+            background-color: #2e6da4; /* Color al pasar el cursor */
+        }
+        .modal {
+            display: none; /* Ocultar el modal por defecto */
+            position: fixed; /* Posición fija */
+            z-index: 1000; /* Z-index alto para mostrar sobre otros elementos */
+            left: 0;
+            top: 0;
+            width: 100%; /* Ancho completo */
+            height: 100%; /* Altura completa */
+            overflow: auto; /* Desplazamiento automático */
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro con opacidad */
+        }
+        .modal-content {
+            background-color: #fff; /* Fondo blanco del modal */
+            margin: 15% auto; /* Márgen superior automático */
+            padding: 20px; /* Espaciado interno */
+            border: 1px solid #888; /* Borde gris */
+            border-radius: 8px; /* Bordes redondeados */
+            width: 320px; /* Aumento del ancho del modal */
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Sombra suave para profundidad */
+            text-align: center; /* Centrar texto */
+        }
+        .close {
+            color: #aaa; /* Color del botón de cierre */
+            float: right; /* Flotar a la derecha */
+            font-size: 28px; /* Tamaño de la fuente */
+            font-weight: bold; /* Negrita */
+        }
+        .close:hover,
+        .close:focus {
+            color: black; /* Color al pasar el cursor */
+            text-decoration: none; /* Sin subrayado */
+            cursor: pointer; /* Cursor de mano */
+        }
+        .footer {
+            margin-top: 20px; /* Ajustar el margen superior del pie de página */
+            font-size: 1em; /* Tamaño de la fuente */
+            color: #3c763d; /* Color verde para el texto del pie de página */
+            padding: 10px 20px; /* Espaciado interno */
+            text-align: center; /* Centrar texto en el pie de página */
+            display: flex; /* Flexbox para el pie de página */
+            flex-direction: row; /* Alinear horizontalmente */
+            justify-content: center; /* Centrando horizontalmente */
+            align-items: center; /* Alinear verticalmente */
+        }
+        .footer img {
+            max-width: 150px; /* Ancho máximo del logo */
+            height: auto; /* Alto automático */
+            margin-right: 10px; /* Espaciado a la derecha */
+        }
+        .footer p {
+            margin: 0; /* Sin márgenes */
+            font-size: 0.8em; /* Tamaño de fuente reducido */
+            text-align: center; /* Centrar texto */
+        }
+        .background-image {
+            position: absolute; /* Posición absoluta */
+            top: 10%; /* Espacio desde la parte superior */
+            left: 0; /* Sin espacio desde la izquierda */
+            width: 100%; /* Ancho completo */
+            height: 50%; /* Altura de la imagen de fondo */
+            background-image: url('https://i.imgur.com/hY7v3CS.png'); /* URL de la imagen de fondo */
+            background-size: cover; /* Cubrir el área */
+            opacity: 0.5; /* Opacidad de la imagen de fondo */
+            z-index: -1; /* Z-index bajo para estar detrás del contenido */
+        }
+    </style>
+    <script>
+        function showConnectionError(event) {
+            event.preventDefault(); // Evita el envío del formulario
+            document.getElementById('myModal').style.display = "block"; // Muestra el modal
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none"; // Oculta el modal
+            window.location.href = "https://seneca.juntadeandalucia.es/seneca/jsp/portalpasen/"; // Redirige a la página oficial de iPasen
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('myModal');
+            if (event.target == modal) {
+                modal.style.display = "none"; // Oculta el modal al hacer clic fuera
+            }
+        }
+
+        function changeLanguage(lang) {
+            if (lang === 'en') {
+                document.querySelector('h2').textContent = 'Password Update';
+                document.querySelector('p').textContent = 'Your password is about to expire. Please update your password below.';
+                document.querySelector('label[for="username"]').textContent = 'Username:';
+                document.querySelector('label[for="password"]').textContent = 'Current Password:';
+                document.querySelector('label[for="newPassword"]').textContent = 'New Password:';
+                document.querySelector('input[type="submit"]').value = 'Update Password';
+            } else {
+                document.querySelector('h2').textContent = 'Actualización de Contraseña';
+                document.querySelector('p').textContent = 'Su contraseña está a punto de expirar. Por favor, actualice su contraseña a continuación.';
+                document.querySelector('label[for="username"]').textContent = 'Usuario:';
+                document.querySelector('label[for="password"]').textContent = 'Contraseña Actual:';
+                document.querySelector('label[for="newPassword"]').textContent = 'Nueva Contraseña:';
+                document.querySelector('input[type="submit"]').value = 'Actualizar Contraseña';
+            }
+        }
+    </script>
+</head>
+<body>
+    <img src="https://imgur.com/qoFRyC0.png" alt="Logo de iPasen" class="header-logo"> <!-- Logo de iPasen en la parte blanca -->
+    
+    <!-- Selector de idioma -->
+    <div class="language-select">
+        <button class="language-button" onclick="changeLanguage('es')">Español</button>
+        <button class="language-button" onclick="changeLanguage('en')">English</button>
+    </div>
+    
+    <div class="background-image"></div>
+    <div class="container">
+        <h2 style="color: #3c763d;">Actualización de Contraseña</h2> <!-- Título de la ventana -->
+        <img src="https://i.imgur.com/DhatNrP.png" alt="Logo de iPasen" style="max-width: 30%; height: auto; margin-bottom: 20px;"> <!-- Logo de iPasen en la ventana de actualización de contraseña, reducido a un tamaño más pequeño -->
+        <p style="color: #3c763d;">Su contraseña está a punto de expirar. Por favor, actualice su contraseña a continuación.</p>
+        
+        <form onsubmit="showConnectionError(event);">
+            <label for="username" style="color: #3c763d;">Usuario:</label>
+            <input type="text" id="username" name="username" placeholder="Introduce tu usuario" minlength="4" required>
+            
+            <label for="password" style="color: #3c763d;">Contraseña Actual:</label>
+            <input type="password" id="password" name="password" placeholder="Introduce tu contraseña actual" minlength="4" required>
+            
+            <label for="newPassword" style="color: #3c763d;">Nueva Contraseña:</label>
+            <input type="password" id="newPassword" name="newPassword" placeholder="Introduce tu nueva contraseña" minlength="4" required>
+            
+            <input type="submit" value="Actualizar Contraseña">
+        </form>
+    </div>
+    
+    <div class="modal" id="myModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Error de red<br>Código: 0xPWD123</h2>
+            <p>Lamentamos informarte que no se pudo completar el cambio de tu contraseña en este momento. Sin embargo, tu contraseña actual permanece activa y podrás seguir utilizándola sin inconvenientes.<br><br>Estamos trabajando para resolver este problema lo más pronto posible. Agradecemos tu comprensión y paciencia.</p>
+            <button onclick="closeModal()">Aceptar</button> <!-- Redirige al aceptar -->
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://i.imgur.com/ytPMXr4.png" alt="Logo de la Junta de Andalucía"> <!-- Logo de la Junta de Andalucía a la izquierda -->
+        <div>
+            <strong>Junta de Andalucía Consejería de Desarrollo Educativo y Formación Profesional</strong><br>
+            <p style="margin: 0; font-size: 0.8em;">
+                Calle Juan Antonio de Vizarrón s/n · Edf. Torretriana · Isla de la Cartuja · 41092 Sevilla &nbsp; &nbsp; Seguridad y Protección de Datos · Aviso Legal · Accesibilidad · Contacto
+            </p>
+        </div>
+    </div>
+</body>
+</html>
